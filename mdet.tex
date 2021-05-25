@@ -132,7 +132,7 @@ to our simulations, shearing the entire field of view including the object posit
 275 coadd pixels on a side with objects only drawn if their center falls in the central 225 pixels. This coadd coordinate
 system is completely flat with a pixel scale of 0.263 arcseconds. We simulate one or more single-epoch images that overlap this
 coadd coordinate system and then use the algorithms above to form the coadd image from which we measure shear.
-Our simulation code is available publicly online.\footnote{\url{https://github.com/beckermr/pizza-cutter-sims}}.
+Our simulation code is available publicly online.\footnote{\url{https://github.com/beckermr/pizza-cutter-sims}}
 
 One key change in the simulations in this work is the inclusion of pixel-level artifacts and non-trivial
 WCS' for the images. For this task, we have written a series of Monte Carlo generators. They generate
@@ -173,6 +173,32 @@ Our final errors on these quantities are computed by bootstrapping over a the me
 number of simulated patches.
 
 \section{Results}\label{sec:results}
+
+\begin{table*}
+  \centering
+  \begin{threeparttable}
+  \caption{
+    Multiplicative and additive biases in weak lensing simulations for various simulation
+    configurations.}
+  \label{tab:shearmeas}
+
+  \begin{tabular}{lcccc}
+    \hline
+    \noalign{\vskip 1mm}
+    Survey & Sim. Params (\texttt{WCS-gals-msk-PSF})\tnote{1} & \# of SE images & m [$10^{-3}$ $3\sigma$ error] & c [$10^{-5}$ $3\sigma$ error]\\
+    \noalign{\vskip 1mm}
+    \hline
+    \noalign{\vskip 1mm}
+    bright exp. & \texttt{d-g-p-gf} & 1 & $0.43 \pm 0.18$ & $0.072 \pm 0.438$ \\
+    \noalign{\vskip 1mm}
+    \hline
+  \end{tabular}
+
+  \begin{tablenotes}
+  \item [1] description goes here
+  \end{tablenotes}
+  \end{threeparttable}
+\end{table*}
 
 \section{Summary}\label{sec:conc}
 
