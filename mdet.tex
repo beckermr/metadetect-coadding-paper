@@ -87,9 +87,16 @@ between these different things and will greatly depend on the details of a given
 With these considerations in mind, we target our tests at coadd regions of about 1 arcminute
 on a side, which appear to be close to optimal for an LSST-like survey \citep{ArmstrongCoadd}.
 
+\begin{figure*}
+    \begin{center}
+        \includegraphics[width=\textwidth]{allsteps.png}
+        \caption{\label{fig:allsteps}}
+    \end{center}
+\end{figure*}
+
 Given the target size of the coadd region, one must choose a suitable projection
 and pixel scale for the coadd coordinate system. With this choice, the coadding process
-works as follows (see Figure~\ref{fig:flowchart}):
+works as follows (see Figure~\ref{fig:allsteps}):
 
 \begin{enumerate}
 \item Find every single-epoch that completely contains within its boundaries the entire coadd region.
@@ -187,7 +194,7 @@ number of simulated patches.
   \begin{tabular}{lcccc}
     \hline
     \noalign{\vskip 1mm}
-    Survey & Sim. Params (\texttt{WCS-gals-msk-PSF})\tnote{1} & \# of SE images & m [$10^{-3}$ $3\sigma$ error] & c [$10^{-5}$ $3\sigma$ error]\\
+    Survey & Sim (\texttt{WCS-gals-msk-PSF})\tnote{1} & \# of SE images & m [$10^{-3}$ $3\sigma$ error] & c [$10^{-5}$ $3\sigma$ error]\\
     \noalign{\vskip 1mm}
     \hline
     \noalign{\vskip 1mm}
@@ -206,27 +213,27 @@ number of simulated patches.
 
 \subsection{Response Computations Across Big-area Mask Edges}
 
-In addition to the small-area pixel-level artifacts we tested above, realistic surveys will have a variety of 
-larger-area masked regions which are fixed on the sky. These will be mainly due to bright stars in our own galaxy, 
-but might also include large, nearby galaxies which are not useful for weak lensing at cosmological distances. These areas, 
-because they are fixed on the sky, present special challenges for weak lensing and \mdet in particular. Unlike the small-area features 
-that are randomly located on the single-epoch images, we cannot hope to interpolate properly in these regions both because of their size and 
-because these regions pile up in the same location in the final coadd images. Furthermore, we do 
-not have access to the data in the masked regions. Thus, when we generate the sheared images in the \mdet process, we cannot 
-properly simulate how the shape measurements of objects near the mask edges change because we cannot measure any extra part of 
+In addition to the small-area pixel-level artifacts we tested above, realistic surveys will have a variety of
+larger-area masked regions which are fixed on the sky. These will be mainly due to bright stars in our own galaxy,
+but might also include large, nearby galaxies which are not useful for weak lensing at cosmological distances. These areas,
+because they are fixed on the sky, present special challenges for weak lensing and \mdet in particular. Unlike the small-area features
+that are randomly located on the single-epoch images, we cannot hope to interpolate properly in these regions both because of their size and
+because these regions pile up in the same location in the final coadd images. Furthermore, we do
+not have access to the data in the masked regions. Thus, when we generate the sheared images in the \mdet process, we cannot
+properly simulate how the shape measurements of objects near the mask edges change because we cannot measure any extra part of
 the image that would have not been masked under a slightly different shear.
 
-We propose the following procedure to correctly compute the response in these cases. A fiducial mask is applied to the data before 
-the \mdet process. This mask is applied to help control artifacts in the \mdet simulation process itself due to bright stars 
-and other numerical effects as discussed in \citep{sheldoninprep}. We then interpolate these masked regions and create the five 
-\mdet images. Finally, we apply a slightly larger version of the mask where the masked area has been increased by a small amount 
-along the boundaries. This amount should be big enough to capture the changes in objects' profiles as they are sheared. An 
-increase of a few arcseconds or $\sim10$ pixels for a DES-like survey should be sufficient. We then measure the shear and 
-response as usual. This procedure uses a small amount of image area around masked regions to properly simulate how objects near a 
+We propose the following procedure to correctly compute the response in these cases. A fiducial mask is applied to the data before
+the \mdet process. This mask is applied to help control artifacts in the \mdet simulation process itself due to bright stars
+and other numerical effects as discussed in \citep{sheldoninprep}. We then interpolate these masked regions and create the five
+\mdet images. Finally, we apply a slightly larger version of the mask where the masked area has been increased by a small amount
+along the boundaries. This amount should be big enough to capture the changes in objects' profiles as they are sheared. An
+increase of a few arcseconds or $\sim10$ pixels for a DES-like survey should be sufficient. We then measure the shear and
+response as usual. This procedure uses a small amount of image area around masked regions to properly simulate how objects near a
 mask edge change under shear with the effects of masking.
 
-Before testing this procedure directly, we demonstrate that if we had access to the imaging behind the masked regions, \mdet would work 
-correctly given modest cuts on objects which are too heavily masked. For this test, we directly simulate the five different \mdet images 
+Before testing this procedure directly, we demonstrate that if we had access to the imaging behind the masked regions, \mdet would work
+correctly given modest cuts on objects which are too heavily masked. For this test, we directly simulate the five different \mdet images
 and apply a fixed mask of randomly placed star-like holes to each one. We reject any objects with a masked pixel within the eight central pixels around the object's center. In this case, for bright exponential objects with a Gaussian PSF on a grid, we find $m=0.29 \pm 0.29 [10^{-3}, 3\sigma]$ \mrb{put in numbers for 4 pixels} consistent with the expectations from second-order shear effects. This test indicates that indeed the edge effects can be corrected by \mdet if we have access to the data behind the mask.
 
 
