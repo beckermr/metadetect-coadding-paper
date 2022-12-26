@@ -36,14 +36,16 @@
 \begin{abstract}
 \mdet is a promising technique for making weak gravitational lensing measurements in the presence of
 object detection and blending. Currently published tests of this algorithm were only done in
-highly idealized situations, neglecting the effects of pixel-level artifact masking, image edges,
-and image coaddition through world coordinate system transforms. In this work, we develop algorithms
-to address each of these effects and demonstrate that \mdet weak lensing shear measurements are
+highly idealized situations, neglecting numerous features present in the analysis of actual
+optical survey data. In this work, we develop algorithms to handle the effects of pixel-level
+artifact masking, image edges, and image coaddition for \mdet weak lensing measurements.
+We demonstrate that with our algorithms, \mdet weak lensing shear measurements are
 unbiased to better than 0.1\% even in the presence of these effects. Looking forward, this work provides
 a baseline set of algorithms that can be implemented in the analysis pipelines of real surveys.
 Future challenges remain, especially concerning image background subtraction, the handling of bright stars,
-and techniques to join \mdet measurements across different survey patches. Ongoing work in current-
-and next-generation surveys will test these techniques and potentially bring yet unknown issues to light.
+wavelength-dependent astrometry, and wavelength-dependent point-spread functions.
+Ongoing work in current- and next-generation surveys will need to address these challenges
+and will potentially bring yet unknown issues to light.
 \end{abstract}
 
 
@@ -52,6 +54,22 @@ and next-generation surveys will test these techniques and potentially bring yet
 \section{Weak Lensing \& \mdet}\label{sec:background}
 
 \section{Methodology and Simulations}\label{sec:sims}
+
+Our methodology is
+designed around a prototypical optical imaging survey that relies on
+coadding multiple images of the same part of the sky in order to reach full depth. We call
+the individual images \textit{single-epoch} images. The set of single-epoch images that
+cover a given region of the sky are coadded together to form the \textit{coadd} image. This
+coadd image is used for object detection and possibly object measurement. We further assume that
+the point-spread function and astrometry of the single-epoch images is known perfectly. However,
+we do allow for each individual image to have artifacts (e.g., cosmic rays, bad columns, etc.),
+masked bright stars, masked streak-like artifacts (e.g., satellites, airplanes), and its own
+unique astrometric solution that does not necessarily align with the coadd coordinate system.
+
+In the next subsections, we start with
+an overview of our procedures for implementing \mdet in such a survey. We then
+describe our simulations. Finally, we we describe our simulation analysis procedures to
+test the performance of \mdet.
 
 \subsection{Image Interpolation and Coadding Procedures}\label{sec:coadd}
 
@@ -173,7 +191,7 @@ the PSF area, the object signal to noise, and the weighted masked fraction.
 To make our simulations more efficient, we employ the noise cancellation method from \citet{pujol2019}. In this technique,
 we generate the same simulation with the same pixel noise, defects, objects etc., but change the sign of
 the shear. We then subtract the mean shape estimates from each simulation, which results in a cancellation of
-the pixel noise while retaining the shear signal.
+the pixel noise and shape noise while retaining the shear signal.
 
 We characterize the results the results of our simulations by the standard multiplicative ($m$) and additive ($c$) biases
 \begin{equation}
